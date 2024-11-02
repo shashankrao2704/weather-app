@@ -1,0 +1,15 @@
+<div>
+    <ul class="tab-list">
+        <li *ngFor="let tab of tabs"
+            [class.active]="tab.id === activeTabId"
+            (click)="selectTab(tab.id)">
+            <span (click)="selectTab(tab.id)">{{ tab.title }} ({{ tab.zip }})</span>
+            <button class="close" (click)="removeTab(tab.zip)">×</button>
+        </li>
+    </ul>
+    <ng-container *ngIf="activeTab">
+        <ng-container
+                *ngTemplateOutlet="contentTemplate; context: { $implicit: activeTab.data }">
+        </ng-container>
+    </ng-container>
+</div>

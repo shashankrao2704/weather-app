@@ -14,10 +14,13 @@ import {routing} from "./app.routing";
 import {HttpClientModule} from "@angular/common/http";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import {TabGroupComponent} from './tab-group/tab-group.component';
+import {CachingSystemService} from './caching-system.service';
 
 @NgModule({
   declarations: [
     AppComponent,
+    TabGroupComponent,
     ZipcodeEntryComponent,
     ForecastsListComponent,
     CurrentConditionsComponent,
@@ -31,7 +34,7 @@ import { environment } from '../environments/environment';
     routing,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [LocationService, WeatherService],
+  providers: [LocationService, WeatherService, CachingSystemService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

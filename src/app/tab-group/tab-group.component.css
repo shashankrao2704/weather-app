@@ -1,0 +1,34 @@
+/* Tabs CSS */
+
+.tab-list {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tab-list li {
+    margin-right: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: #337ab7;
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.tab-list li.active {
+    background-color: #1a507e;
+}
+
+.tab-list li .close {
+    margin-left: 10px;
+    cursor: pointer;
+    color: white;
+}
+
+.tab-list li .close:hover {
+    color: white;
+    font-weight: bold;
+}
+

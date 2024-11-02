@@ -1,33 +1,40 @@
-import { Injectable } from '@angular/core';
-import {WeatherService} from "./weather.service";
+import {Injectable, signal, WritableSignal} from '@angular/core';
 
 export const LOCATIONS : string = "locations";
 
 @Injectable()
 export class LocationService {
 
-  locations : string[] = [];
+  private locations : WritableSignal<string[]>  = signal([]);
 
-  constructor(private weatherService : WeatherService) {
+  constructor() {
     let locString = localStorage.getItem(LOCATIONS);
-    if (locString)
-      this.locations = JSON.parse(locString);
-    for (let loc of this.locations)
-      this.weatherService.addCurrentConditions(loc);
-  }
-
-  addLocation(zipcode : string) {
-    this.locations.push(zipcode);
-    localStorage.setItem(LOCATIONS, JSON.stringify(this.locations));
-    this.weatherService.addCurrentConditions(zipcode);
-  }
-
-  removeLocation(zipcode : string) {
-    let index = this.locations.indexOf(zipcode);
-    if (index !== -1){
-      this.locations.splice(index, 1);
-      localStorage.setItem(LOCATIONS, JSON.stringify(this.locations));
-      this.weatherService.removeCurrentConditions(zipcode);
+    // Checks if locSting is undefined even when local storage returns it as string
+    if (locString && locString !== 'undefined') {
+      this.locations.set(JSON.parse(locString));
     }
+  }
+
+  getLocations(): string[] {
+    return this.locations();
+  }
+
+  // check if location already exists
+  hasLocation(zipcode: string): boolean {
+    return this.locations().includes(zipcode);
+  }
+
+  // checks if location already exists otherwise adds to the local storage
+  addLocation(zipcode : string) {
+    if (!this.hasLocation(zipcode)) {
+      this.locations.set([...this.locations(), zipcode]);
+      localStorage.setItem(LOCATIONS, JSON.stringify(this.locations()));
+    }
+  }
+
+  // removes location from the local storage
+  removeLocation(zipcode : string) {
+    this.locations.set(this.locations().filter(loc => loc !== zipcode));
+    localStorage.setItem(LOCATIONS, JSON.stringify(this.locations()));
   }
 }
